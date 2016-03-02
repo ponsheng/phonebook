@@ -42,11 +42,12 @@ int main(int argc, char *argv[])
     printf("size of entry : %lu bytes\n", sizeof(entry));
     e = pHead;
     e->pNext = NULL;
-
+    
 #if defined(__GNUC__)
     __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));
 #endif
     clock_gettime(CLOCK_REALTIME, &start);
+#if !defined(OPT2)
     while (fgets(line, sizeof(line), fp)) {
         while (line[i] != '\0')
             i++;
@@ -54,6 +55,20 @@ int main(int argc, char *argv[])
         i = 0;
         e = append(line, e);
     }
+#else
+    entry *hashtable[300001] ={};
+    while(fgets(line, sizeof(line), fp)) {
+        while (line[i] != '\0')
+            i++;
+        line[i - 1] = '\0';
+        i = 0;
+        append(line,hashtable);
+    }
+    for(int j=0;j<30000;j++){
+        printf("ll %d  %s ",j,hashtable[j]->lastName);
+        
+    }
+#endif
     clock_gettime(CLOCK_REALTIME, &end);
     cpu_time1 = diff_in_second(start, end);
 
@@ -63,25 +78,34 @@ int main(int argc, char *argv[])
     e = pHead;
 
     /* the givn last name to find */
-    char input[MAX_LAST_NAME_SIZE] = "zyxel";
-    e = pHead;
-
-    assert(findName(input, e) &&
-           "Did you implement findName() in " IMPL "?");
-    assert(0 == strcmp(findName(input, e)->lastName, "zyxel"));
-
+    //char input0[MAX_LAST_NAME_SIZE] = "aaaaaa";
+    //char input0[MAX_LAST_NAME_SIZE] = "zyxel";
+    //assert(findName(input0, e) &&
+    //       "Did you implement findName() in " IMPL "?");
+    //assert(0 == strcmp(findName(input0, e)->lastName, "zyxel"));
+    
+    
+    //char input[MAX_LAST_NAME_SIZE] ="zyxel";
+    char input[MAX_LAST_NAME_SIZE] ="aaaa";
 #if defined(__GNUC__)
     __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));
 #endif
     /* compute the execution time */
     clock_gettime(CLOCK_REALTIME, &start);
+#if !defined(OPT2)
     findName(input, e);
+#else
+    printf("%s ",findName(input,hashtable)->lastName);
+#endif
     clock_gettime(CLOCK_REALTIME, &end);
     cpu_time2 = diff_in_second(start, end);
+    
 
     FILE *output;
-#if defined(OPT)
-    output = fopen("opt.txt", "a");
+#if defined(OPT1)
+    output = fopen("opt1.txt", "a");
+#elif defined(OPT2)
+    output = fopen("opt2.txt", "a");
 #else
     output = fopen("orig.txt", "a");
 #endif
