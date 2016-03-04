@@ -11,11 +11,10 @@ entry *findName(char lastName[],entry *hashtable[])
     if(hashtable[id])
     {
         entry *temp = hashtable[id];
-        while(temp->pNext)
+        while(temp)
         {
             if (strcasecmp(lastName, temp->lastName) == 0)
             {
-                printf("%s found\n",temp->lastName);
                 return temp;
             }
             temp= temp->pNext;
@@ -44,27 +43,20 @@ entry *append(char lastName[], entry *hashtable[])
     }
     else
     {
-        entry *temp = hashtable[id];
-        while(temp->pNext)
-        {
-            temp= temp->pNext;
-        }
-        temp->pNext = e;
+        e->pNext = hashtable[id]->pNext;
+        hashtable[id]->pNext = e;
     }
     return e;
 }
 
-unsigned hash_fun(char key[])
+unsigned hash_fun(char key[]) //djb2 hash function
 {
-    int mod = 900000;
-    //int length = sizeof(key[0]);//sizeof(key[0]);
-    //int count = strArray.Count(x => x != null); count size ways
-    unsigned sum;
-    int i;
-    for (sum=1, i=0; i < 16&&key[i]>0; i++){
-        if(key[i]>0)
-		sum *= key[i];
+    int mod = TABLE_SIZE;
+    unsigned hash = 5381;
+    int i=0;
+    while (key[i]>0)
+    {
+        hash = ((hash << 5) + hash) + key[i++]; /* hash * 33 + c */
     }
-    //printf(" id: %u",sum);
-    return (sum % mod)/3;
+    return hash % mod ;
 }
