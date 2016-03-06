@@ -2,7 +2,7 @@ CC ?= gcc
 CFLAGS_common ?= -Wall -std=gnu99 -DNDEBUG
 CFLAGS_orig = -O0
 CFLAGS_opt1  = -O0 -DOPT1="1"
-CFLAGS_opt2  = -O0 -DOPT2="1" -DTABLE_SIZE=50000
+CFLAGS_opt2  = -O0 -DOPT2="1" -DTABLE_SIZE=10000
 
 EXEC = phonebook_orig phonebook_opt1 phonebook_opt2
 all: $(EXEC)
@@ -48,6 +48,7 @@ output.txt: cache-test calculate
 
 plot: output.txt
 	gnuplot scripts/runtime.gp
+	eog runtime.png
 
 calculate: calculate.c
 	$(CC) $(CFLAGS_common) $^ -o $@

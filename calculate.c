@@ -26,10 +26,10 @@ int main(void)
 
     fp = fopen("opt1.txt", "r");
     if (!fp) {
-        
+
         printf("ERROR opening input file opt1.txt\n");
         exit(0);
-        
+
     }
     double opt1_sum_a = 0.0, opt1_sum_f = 0.0, opt1_a, opt1_f;
     for (i = 0; i < 100; i++) {
@@ -42,7 +42,7 @@ int main(void)
         opt1_sum_a += opt1_a;
         opt1_sum_f += opt1_f;
     }
-    
+
     fp = fopen("opt2.txt", "r");
     if (!fp) {
         printf("ERROR opening input file opt2.txt\n");
